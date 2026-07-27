@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BarTrack — Bar exam prep</title>
+<meta name="theme-color" content="#5a63f0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">§</div>
+      <div>
+        <div class="brand-name">BarTrack</div>
+        <div class="brand-sub">Хуульчийн шалгалт</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav">
+      <button class="nav-item is-on" data-view="today"><span class="dot" style="background:#5a63f0"></span><span>Өнөөдөр</span></button>
+      <button class="nav-item" data-view="calendar"><span class="dot" style="background:#e0821b"></span><span>Хуанли</span></button>
+      <button class="nav-item" data-view="syllabus"><span class="dot" style="background:#189150"></span><span>Хуулийн жагсаалт</span></button>
+      <button class="nav-item" data-view="stats"><span class="dot" style="background:#8f7ff5"></span><span>Статистик</span></button>
+      <button class="nav-item" data-view="settings"><span class="dot" style="background:#9298b0"></span><span>Тохиргоо</span></button>
+    </nav>
+
+    <div class="side-foot">
+      <div class="streak-card">
+        <div class="streak-label">🔥 ТАСРАЛТГҮЙ ӨДӨР</div>
+        <div class="streak-row"><span class="streak-num" id="streakNum">0</span><span class="streak-unit">өдөр</span></div>
+        <div class="streak-best">Дээд амжилт: <span id="streakBest">0</span> өдөр</div>
+      </div>
+      <div class="me-row">
+        <div class="me-badge">ME</div>
+        <div class="me-text">Solo mode · зөвхөн чи</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <header class="topbar">
+      <button class="hamburger" id="hamburger" aria-label="Цэс">☰</button>
+      <div class="topbar-lead">
+        <div class="topbar-date" id="todayDate">—</div>
+        <h1 class="topbar-title" id="topbarTitle">Өнөөдөр</h1>
+      </div>
+      <div class="countdown">
+        <div class="cd-num-wrap">
+          <div class="cd-num" id="daysLeft">—</div>
+          <div class="cd-cap">ӨДӨР ҮЛДСЭН</div>
+        </div>
+        <div class="cd-sep"></div>
+        <div class="cd-prog">
+          <div class="cd-day" id="dayOf">—</div>
+          <div class="cd-bar"><div class="cd-fill" id="sprintFill"></div></div>
+          <div class="cd-exam" id="examLabel">—</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ---------- TODAY ---------- -->
+    <section class="view" id="view-today">
+      <div class="grid-2">
+        <div class="col">
+
+          <div class="card pad-lg">
+            <div class="today-hero">
+              <div class="ring-wrap">
+                <svg viewBox="0 0 120 120" class="ring">
+                  <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+                  <circle cx="60" cy="60" r="52" class="ring-fg" id="ringFg"></circle>
+                </svg>
+                <div class="ring-mid">
+                  <span class="ring-num"><span id="doneCount">0</span><span class="ring-den">/<span id="totalCount">0</span></span></span>
+                  <span class="ring-cap">ДААЛГАВАР</span>
+                </div>
+              </div>
+              <div class="stat-pair">
+                <div class="stat stat-green">
+                  <div class="stat-cap">ЗӨВ ХАРИУЛТ</div>
+                  <div class="stat-num" id="accPct">—</div>
+                  <div class="stat-sub"><span id="accSub">хараахан бүртгээгүй</span></div>
+                </div>
+                <div class="stat stat-indigo">
+                  <div class="stat-cap">ТЕСТИЙН ТОО</div>
+                  <div class="stat-num"><span id="qDone">0</span><span class="stat-den">/<span id="qGoal">0</span></span></div>
+                  <div class="stat-bar"><div class="stat-fill" id="qFill"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card pad-md proj-mini" id="projMini"></div>
+
+          <div class="card pad-md">
+            <div class="card-head">
+              <h2>Өнөөдрийн төлөвлөгөө</h2>
+              <span class="muted-sm" id="planSummary">—</span>
+            </div>
+            <div id="taskList"></div>
+          </div>
+
+        </div>
+
+        <div class="col">
+          <div class="card pad-md">
+            <h3>⚠️ Сул талууд</h3>
+            <p class="card-note">Хамгийн бага оноотой сэдвүүд</p>
+            <div id="weakList"></div>
+          </div>
+
+          <div class="card pad-md">
+            <h3>📍 Ирэх үе шатууд</h3>
+            <div id="milestoneList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- CALENDAR ---------- -->
+    <section class="view hidden" id="view-calendar">
+      <div class="grid-2">
+        <div class="card pad-lg">
+          <div class="card-head">
+            <h2 id="monthLabel">—</h2>
+            <div class="mo-nav">
+              <button id="prevMonth" aria-label="Өмнөх сар">‹</button>
+              <button id="nextMonth" aria-label="Дараах сар">›</button>
+            </div>
+          </div>
+          <div class="cal-wd" id="calWeekdays"></div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="legend">
+            <span class="muted-sm">Гүйцэтгэл</span>
+            <div class="lg"><span class="sw" style="background:#d3f4e1"></span>Маш сайн</div>
+            <div class="lg"><span class="sw" style="background:#e4f6d2"></span>Сайн</div>
+            <div class="lg"><span class="sw" style="background:#fdefcf"></span>Дунд</div>
+            <div class="lg"><span class="sw" style="background:#ffe1df"></span>Сул</div>
+            <div class="lg"><span class="sw" style="background:#f3f5fb"></span>Бүртгэгдээгүй</div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card pad-md">
+            <div class="stat-cap">СОНГОСОН ӨДӨР</div>
+            <div class="sel-date" id="selDate">— өдөр сонго —</div>
+            <div id="selBody"></div>
+          </div>
+          <div class="card grad pad-md">
+            <div class="stat-cap">ЭНЭ САР</div>
+            <div class="mo-grid">
+              <div><div class="mo-num" id="mAvg">0</div><div class="mo-cap">дундаж оноо</div></div>
+              <div><div class="mo-num" id="mDays">0</div><div class="mo-cap">хичээлсэн өдөр</div></div>
+              <div><div class="mo-num" id="mQ">0</div><div class="mo-cap">тест хийсэн</div></div>
+              <div><div class="mo-num" id="mHours">0</div><div class="mo-cap">цаг</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- SYLLABUS ---------- -->
+    <section class="view hidden" id="view-syllabus">
+      <div class="card pad-md">
+        <div class="card-head">
+          <h2>Хуулийн жагсаалт</h2>
+          <span class="muted-sm" id="sylSummary">—</span>
+        </div>
+        <div class="filter-row">
+          <input type="search" id="sylSearch" placeholder="Хууль хайх…" class="input">
+          <select id="sylFilter" class="input select">
+            <option value="all">Бүгд</option>
+            <option value="todo">Хийгээгүй</option>
+            <option value="active">Эхэлсэн</option>
+            <option value="done">Дууссан</option>
+            <option value="weak">Сул (&lt;70%)</option>
+          </select>
+        </div>
+        <div id="sylList"></div>
+      </div>
+    </section>
+
+    <!-- ---------- STATS ---------- -->
+    <section class="view hidden" id="view-stats">
+      <div class="card pad-lg proj-card" id="projCard"></div>
+      <div class="kpi-row" id="kpiRow"></div>
+      <div class="grid-2">
+        <div class="card pad-md">
+          <h3>Бүлэг тус бүрийн явц</h3>
+          <div id="groupProgress"></div>
+        </div>
+        <div class="col">
+          <div class="card pad-md">
+            <h3>Хурд ба хуваарь</h3>
+            <div id="paceBox"></div>
+          </div>
+          <div class="card pad-md">
+            <h3>Кейс бодох дасгал</h3>
+            <div id="caseBox"></div>
+          </div>
+          <div class="card pad-md">
+            <h3>Сүүлийн 14 хоногийн оноо</h3>
+            <div class="spark" id="spark"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- SETTINGS ---------- -->
+    <section class="view hidden" id="view-settings">
+      <div class="grid-2">
+        <div class="col">
+          <div class="card pad-md">
+            <h3>Хуваарь</h3>
+            <p class="card-note">Өөрчлөхөд төлөвлөгөө шинэчлэгдэнэ. Бүртгэсэн явц хадгалагдана.</p>
+            <div class="form">
+              <label>Эхлэх огноо<input type="date" id="setStart" class="input"></label>
+              <label>Шалгалтын өдөр<input type="date" id="setExam" class="input"></label>
+              <label>Ажлын өдрийн тест<input type="number" id="setWeekday" class="input" min="10" max="400" step="5"></label>
+              <label>Амралтын өдрийн тест<input type="number" id="setWeekend" class="input" min="10" max="400" step="5"></label>
+              <label>Эцсийн давталтын хоног<input type="number" id="setTail" class="input" min="0" max="30"></label>
+              <label>Тест тутамд (минут)<input type="number" id="setMinPerQ" class="input" min="0.3" max="5" step="0.1"></label>
+              <label>7 хоногт шийдвэр унших<input type="number" id="setCasesWeek" class="input" min="0" max="7"></label>
+              <label>Нэг удаад хэдэн шийдвэр<input type="number" id="setCasesSession" class="input" min="1" max="10"></label>
+              <label>Нэг кейст өгөх минут<input type="number" id="setCaseMinutes" class="input" min="30" max="300" step="15"></label>
+              <label>Тестийн оноо<input type="number" id="setTestPoints" class="input" min="1" max="200"></label>
+              <label>Кейсийн оноо<input type="number" id="setCasePoints" class="input" min="1" max="200"></label>
+              <label>Тэнцэх оноо<input type="number" id="setPassMark" class="input" min="1" max="400"></label>
+              <label>Шалгалтын асуултын тоо<input type="number" id="setTestQ" class="input" min="10" max="1000" step="10"></label>
+              <label>Өмнөх удаа — тест<input type="number" id="setBaseTest" class="input" min="0" max="200"></label>
+              <label>Өмнөх удаа — кейс<input type="number" id="setBaseCase" class="input" min="0" max="200"></label>
+            </div>
+            <div class="rest-row">
+              <span class="lbl">Кейс бодох дасгал</span>
+              <div class="chips">
+                <button class="chip" id="setCaseTrack">Цагтай кейсийн дасгал</button>
+                <button class="chip" id="setOpenBook">Нээлттэй ном</button>
+              </div>
+            </div>
+            <div class="rest-row">
+              <span class="lbl">Амралтын өдөр</span>
+              <div class="chips" id="restChips"></div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="autoBalance">Автоматаар тэнцвэржүүлэх</button>
+              <button class="btn" id="saveSettings">Хадгалах</button>
+            </div>
+            <div class="feasibility" id="feasibility"></div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card pad-md">
+            <h3>Сануулга</h3>
+            <p class="card-note">Өдөр бүр тогтсон цагт сануулна. Найдвартай ажиллахын тулд аппыг утсандаа суулгаарай (Add to Home Screen).</p>
+            <div class="form">
+              <label>Сануулах цаг<input type="time" id="setNotifyTime" class="input"></label>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="enableNotif">Сануулга асаах</button>
+              <button class="btn" id="testNotif">Туршиж үзэх</button>
+            </div>
+            <div class="notif-state" id="notifState"></div>
+          </div>
+
+          <div class="card pad-md">
+            <h3>Хуанлид нэмэх</h3>
+            <p class="card-note">.ics файл татаж Outlook / Google Calendar-т импортлоно. Хамгийн найдвартай сануулга энэ.</p>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="exportIcs">Хуанли татах (.ics)</button>
+            </div>
+          </div>
+
+          <div class="card pad-md">
+            <h3>Өгөгдөл</h3>
+            <p class="card-note">Явц энэ төхөөрөмж дээр хадгалагдана. Тогтмол нөөцлөөрэй.</p>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="exportJson">Нөөцлөх (JSON)</button>
+              <button class="btn" id="importJsonBtn">Сэргээх</button>
+              <button class="btn btn-danger" id="resetAll">Бүгдийг устгах</button>
+            </div>
+            <input type="file" id="importJson" accept="application/json" hidden>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
